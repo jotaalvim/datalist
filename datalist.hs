@@ -71,12 +71,24 @@ intersperse a []    = []
 intersperse a [x]   = [x]
 intersperse a (h:t) = h:a:intersperse a t
 
-intersperse2 a l = tail [ a:x | x <- l ]
+intersperse2 a l = tail $ concat [ a:[x] | x <- l ]
 
 -- intercalate é tipo a intersperse mas para lista
+-- intercalate ", " ["Lorem", "ipsum", "dolor"] = "Lorem, ipsum, dolor"
 intercalate :: [a] -> [[a]] -> [a] 
-intercalate a []   = []
-intercalate a [[x]]  = [x]
-intercalate a (h:t)= h ++ a ++ intercalate a t
+intercalate a []    = []
+intercalate a [l] = l 
+intercalate a (h:t) = h ++ a ++ intercalate a t
 
-intercalate2 a l =  tail [ a ++ x | x <- l ]
+intercalate3 a (h:t) = concat $ h:[ a ++ x | x <- t ]
+
+-- traspose matriz transposta 
+transpose :: [[a]] -> [[a]] 
+transpose l = [ map (!! k) l | k <- [0..(length $head l)- 1] ]
+--FIXME
+
+-- subsequences lista de subsequencias
+subsequences :: [a] -> [[a]] 
+subsequences [] = []
+subsequences 
+
