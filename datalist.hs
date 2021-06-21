@@ -108,8 +108,10 @@ permutations2 l = concat [ map ( (:)(l!!k) ) (permutations $ delete2 k l ) | k <
 
  -- * Reducing lists (folds)
 
+-- foldl 
+foldl :: (b -> a -> b) -> b -> a -> b
+foldl f a l =  
 
-   , foldl
    , foldl'
    , foldl1
    , foldl1'
