@@ -88,57 +88,44 @@ transpose :: [[a]] -> [[a]] --transpose l = [ map (!! k) l | k <- [0..(length $ 
 transpose l = [[ linha !! k | linha <- l, k < length linha ] | k <- [0.. t-1]]
     where t = maximum $ map length l
 
-
-
 --  subsequences
-
-
-
+subsequences :: [a] -> [[a]]
+subsequences [] = [[]]
+subsequences (h:t)  = [ h:x | x <- l ]  ++ l
+    where l = subsequences t
 
 -- permutations permuta uma lista
-permutations :: [a] -> [[a]]
-permutations [] = []
---permutations l = [ map  (: l!!k ) (permutations (delete (l!!k) l)) | k <- [0..length l -1] ]  
 
-permutations (h:t) = [ map (:h) (permutations t) | k <- [0..length t] ]  
--------------------------------------------------------------------------
--------------------------------------------------------------------------
--------------------------------------------------------------------------
+permutations [] = [[]]
+permutations l = [ (l!!k):x 
+                  | k <- [0..length l-1]
+                  , x <- (permutations $ delete2 k l) ]
 
+permutations2 :: [a] -> [[a]]
+permutations2 [] = [[]]
+----permutations l = [ map  (: l!!k ) (permutations (delete (l!!k) l)) | k <- [0..length l -1] ]  
+permutations2 l = concat [ map ( (:)(l!!k) ) (permutations $ delete2 k l ) | k <- [0..length l-1] ]  
 
-
-
-
-
+ -- * Reducing lists (folds)
 
 
-
-
-
-
-
-
+   , foldl
+   , foldl'
+   , foldl1
+   , foldl1'
+   , foldr
+   , foldr1
 
 
 
 
 
 
--- subsequences lista de subsequencias
 
 
---sub l = []: continuousSubSeqs l
---continuousSubSeqs = filter (not . null) . concatMap inits . tails
---continuousSubSeqs ls = [t | i <- inits ls, t <- tails i, not $ null t]
---
-------------------------------------------
---subsequences            :: [a] -> [[a]]
---subsequences xs         =  [] : nonEmptySubsequences xs
---
---nonEmptySubsequences         :: [a] -> [[a]]
---nonEmptySubsequences []      =  []
---nonEmptySubsequences (x:xs)  =  [x] : foldr f [] (nonEmptySubsequences xs)
---  where f ys r = ys : (x : ys) : r
+
+
+
 
 
 -- delete apaga a primeira ocorrencia 
@@ -147,7 +134,12 @@ delete x [] = []
 delete x (h:t)
     | x == h = t
     | otherwise = h: delete x t
-
+------------------------------
+delete2 :: Int -> [a] -> [a]
+delete2 _ [] = []
+delete2 0 (h:t) = t
+delete2 n (h:t) = h: delete2 (n-1) t 
+-------------------
 
 -- (!!) seleciona um indice numa lista
 pp :: Eq a => [a] -> Int -> a
