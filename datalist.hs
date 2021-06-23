@@ -109,18 +109,43 @@ permutations2 l = concat [ map ( (:)(l!!k) ) (permutations $ delete2 k l ) | k <
  -- * Reducing lists (folds)
 
 -- foldl 
-foldl :: (b -> a -> b) -> b -> a -> b
-foldl f a l =  
+myfoldl :: (b -> a -> b) -> b -> [a] -> b
+myfoldl f a [] = a
+myfoldl f a (h:t) = myfoldl f (f a h) t 
 
-   , foldl'
-   , foldl1
-   , foldl1'
-   , foldr
-   , foldr1
+--   , foldl'
+--   , foldl1
+--   , foldl1'
+
+-- foldr
+myfoldr :: (a -> b -> b) -> b ->[a] -> b
+myfoldr f a [] = a
+myfoldr f a (h:t) = f h (myfoldr f a t)
 
 
+-- FIXME
+--   , foldr1
 
 
+-- * Special folds
+
+-- concat concatena listas de listas
+myconcat :: [[a]] -> [a]
+myconcat [] = [] 
+myconcat (h:t) = h ++ myconcat t
+
+-- concatMap equivalente a concat $ map
+
+myconcatMap :: [[a]] (a -> b)
+
+--   , and
+--   , or
+--   , any
+--   , all
+--   , sum
+--   , product
+--   , maximum
+--   , minimum
 
 
 
@@ -137,6 +162,7 @@ delete x (h:t)
     | x == h = t
     | otherwise = h: delete x t
 ------------------------------
+-- apaga um indice
 delete2 :: Int -> [a] -> [a]
 delete2 _ [] = []
 delete2 0 (h:t) = t
