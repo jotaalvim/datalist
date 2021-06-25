@@ -1,4 +1,4 @@
-   -- * Basic functions
+-- * Basic functions
 
 -- (++) concatena listas
 mm :: [a] -> [a] -> [a]
@@ -135,19 +135,72 @@ myconcat [] = []
 myconcat (h:t) = h ++ myconcat t
 
 -- concatMap equivalente a concat $ map
+myconcatMap :: (a -> [b]) -> [a] -> [b]
+myconcatMap f [] = []
+myconcatMap f (h:t) = f h ++ myconcatMap f t
 
-myconcatMap :: [[a]] (a -> b)
+-- and
+myand :: Bool -> Bool -> Bool
+myand True True = True
+myand _    _    = False
 
---   , and
---   , or
---   , any
---   , all
---   , sum
---   , product
---   , maximum
---   , minimum
+-- or
+myor :: Bool -> Bool -> Bool
+myor False False = False
+myor _    _     = True
+
+-- any verifica se existe algum elemento se cumpre a condiçao numa lista 
+myany :: (a -> Bool) -> [a] -> Bool
+myany c [] = False
+myany c (h:t) = c h || myany c t    
+
+-- all todos os elementos cumprem a condiçao
+myall :: (a -> Bool) -> [a] -> Bool
+myall c [] = True
+myall c (h:t) = c h && myall c t
+
+-- sum soma uma lista
+mysum :: Num a => [a] -> a
+mysum [] = 0
+mysum (h:t) = h + mysum t
+
+-- product produto de uma lista
+myproduct :: Num a => [a] -> a
+myproduct [] = 1
+myproduct (h:t) = h * myproduct t
+
+-- maximum  máximo de lista
+mymaximum :: Ord a => [a] -> a
+mymaximum [] = error "empty list"
+mymaximum [x] = x
+mymaximum (h:t) = if (h > k) then h else k
+    where k = mymaximum t
+
+-- minimum minimo de lista 
+myminimum :: Ord a => [a] -> a
+myminimum [] = error "empty list"
+myminimum [x] = x
+myminimum (h:t) = if (h < k) then h else k
+    where k = myminimum t
+
+-- * Building lists
+
+-- ** Scans
+-- scanl
+myscanl :: (b -> a -> b) -> b -> [a] -> [b] 
+myscanl f a [] = [a]
+myscanl f a (h:t) = a : myscanl f (f a h) t 
+
+-- scanl'
+-- scanl1
+
+-- scanr
+myscanr :: (a -> b -> b) -> b -> [a] -> [b]
+myscanr f a [] = [a]
+myscanr f a (h:t) = f h (myscanr f a t)
 
 
+-- scanr1
 
 
 
