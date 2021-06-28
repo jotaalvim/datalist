@@ -114,7 +114,7 @@ myfoldl f a [] = a
 myfoldl f a (h:t) = myfoldl f (f a h) t 
 
 --   , foldl'
---   , foldl1
+--   , foldl1 nao leva acumulador (é o primeiro elemntos)
 --   , foldl1'
 
 -- foldr
@@ -135,6 +135,7 @@ myconcat [] = []
 myconcat (h:t) = h ++ myconcat t
 
 -- concatMap equivalente a concat $ map
+-- especie de fold com map? fold para subtituir o concat
 myconcatMap :: (a -> [b]) -> [a] -> [b]
 myconcatMap f [] = []
 myconcatMap f (h:t) = f h ++ myconcatMap f t
