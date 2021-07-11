@@ -14,10 +14,13 @@ myhead [] = error "empty list"
 myhead (h:t) = h
 
 -- last ultimo elemento
-mylast :: [a] -> a
-mylast [] = error "empty list"
-mylast [x] = x
-mylast (h:t) = mylast t
+--mylast (h:t) = foldr (id) h t 
+--FIXME
+
+mylast2 :: [a] -> a
+mylast2 [] = error "empty list"
+mylast2 [x] = x
+mylast2 (h:t) = mylast2 t
 
 -- tail cauda 
 mytail :: [a] -> [a]
@@ -45,35 +48,43 @@ mynull [] = True
 mynull  _ = False
 
 -- length tamanho de uma lista 
-mylength [] = 0
-mylength (h:t) = 1 + mylength t
+mylength l = foldr (\x a-> a+1) 0 l
+
+mylength2 [] = 0
+mylength2 (h:t) = 1 + mylength2 t
 
 
 -- * List transformations
 
 -- map aplica uma funçao a todos os elementos de uma lista
-mymap :: (a -> b) -> [a] -> [b]
-mymap f [] = []
-mymap f (h:t) = f h : mymap f t
 
-mymap2 f l = [ f x | x <- l ]
+mymap f l = foldr ( (:) . f ) [] l
+
+mymap2 :: (a -> b) -> [a] -> [b]
+mymap2 f [] = []
+mymap2 f (h:t) = f h : mymap2 f t
+
+mymap3 f l = [ f x | x <- l ]
    
 -- reverse inverte uma lista
-myreverse :: [a] -> [a]
-myreverse l = revaux l []
+myreverse l = foldl ( flip (:) ) [] l
+
+myreverse2 :: [a] -> [a]
+myreverse2 l = revaux l []
 
 revaux :: [a] -> [a] -> [a]
 revaux [] l = l
 revaux (h:t) l = revaux t (h:l)
 
-myreverse2 [] = []
-myreverse2 (h:t) = myreverse2 t ++ [h]
+myreverse3 [] = []
+myreverse3 (h:t) = myreverse3 t ++ [h]
 
 -- intersperse coloca um elemento no meio de todos de uma lista 
-intersperse :: a -> [a] -> [a]
-intersperse a []    = []
-intersperse a [x]   = [x]
-intersperse a (h:t) = h:a:intersperse a t
+
+intersperse2 :: a -> [a] -> [a]
+intersperse2 a []    = []
+intersperse2 a [x]   = [x]
+intersperse2 a (h:t) = h:a:intersperse2 a t
 
 intersperse2 a l = tail $ concat [ a:[x] | x <- l ]
    
