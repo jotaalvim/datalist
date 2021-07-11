@@ -114,7 +114,10 @@ myfoldl f a [] = a
 myfoldl f a (h:t) = myfoldl f (f a h) t 
 
 --   , foldl'
---   , foldl1 nao leva acumulador (é o primeiro elemntos)
+-- foldl1 nao leva acumulador (é o primeiro elemntos)
+--myfoldl1 :: (b -> a -> b) -> [a] -> b
+--myfoldl1 f (h:t) = 
+
 --   , foldl1'
 
 -- foldr
@@ -151,9 +154,13 @@ myor False False = False
 myor _    _     = True
 
 -- any verifica se existe algum elemento se cumpre a condiçao numa lista 
-myany :: (a -> Bool) -> [a] -> Bool
-myany c [] = False
-myany c (h:t) = c h || myany c t    
+myany c l = foldr (\x a -> c x || a) False l
+
+myany3 c l = foldr ( c . || ) False l
+
+myany2 :: (a -> Bool) -> [a] -> Bool
+myany2 c [] = False
+myany2 c (h:t) = c h || myany2 c t    
 
 -- all todos os elementos cumprem a condiçao
 myall :: (a -> Bool) -> [a] -> Bool
@@ -198,7 +205,8 @@ myscanl f a (h:t) = a : myscanl f (f a h) t
 -- scanr
 myscanr :: (a -> b -> b) -> b -> [a] -> [b]
 myscanr f a [] = [a]
-myscanr f a (h:t) = f h (myscanr f a t)
+myscanr f a (h:t) = f h h2 : (h2:t2)  
+    where (h2:t2) = myscanr f a t
 
 
 -- scanr1
