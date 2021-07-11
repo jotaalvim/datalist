@@ -1,10 +1,12 @@
 -- * Basic functions
 
 -- (++) concatena listas
-mm :: [a] -> [a] -> [a]
-mm [] l = l
-mm l [] = l
-mm (h:t) l2 = h : mm t l2
+mm a b = foldr (:) b a
+
+mm2 :: [a] -> [a] -> [a]
+mm2 [] l = l
+mm2 l [] = l
+mm2 (h:t) l2 = h : mm2 t l2
 
 -- head cabeça de lista
 myhead :: [a] -> a
@@ -115,17 +117,12 @@ myfoldl f a (h:t) = myfoldl f (f a h) t
 
 --   , foldl'
 -- foldl1 nao leva acumulador (é o primeiro elemntos)
---myfoldl1 :: (b -> a -> b) -> [a] -> b
---myfoldl1 f (h:t) = 
-
 --   , foldl1'
 
 -- foldr
 myfoldr :: (a -> b -> b) -> b ->[a] -> b
 myfoldr f a [] = a
 myfoldr f a (h:t) = f h (myfoldr f a t)
-
-
 -- FIXME
 --   , foldr1
 
@@ -155,62 +152,66 @@ myor _    _     = True
 
 -- any verifica se existe algum elemento se cumpre a condiçao numa lista 
 myany c l = foldr (\x a -> c x || a) False l
-
-myany3 c l = foldr ( c . || ) False l
-
+--myany3 c l = foldr ( c . || ) False l
+--FIXME
 myany2 :: (a -> Bool) -> [a] -> Bool
 myany2 c [] = False
 myany2 c (h:t) = c h || myany2 c t    
 
 -- all todos os elementos cumprem a condiçao
-myall :: (a -> Bool) -> [a] -> Bool
-myall c [] = True
-myall c (h:t) = c h && myall c t
+myall c l = foldr (\x a -> c x && a) True l
+
+myall2 :: (a -> Bool) -> [a] -> Bool
+myall2 c [] = True
+myall2 c (h:t) = c h && myall2 c t
 
 -- sum soma uma lista
-mysum :: Num a => [a] -> a
-mysum [] = 0
-mysum (h:t) = h + mysum t
+mysum l = foldr (+) 0 l
+
+mysum2 :: Num a => [a] -> a
+mysum2 [] = 0
+mysum2 (h:t) = h + mysum2 t
 
 -- product produto de uma lista
-myproduct :: Num a => [a] -> a
-myproduct [] = 1
-myproduct (h:t) = h * myproduct t
+myproduct l = foldr (*) 1 l
+
+myproduct2 :: Num a => [a] -> a
+myproduct2 [] = 1
+myproduct2 (h:t) = h * myproduct2 t
 
 -- maximum  máximo de lista
-mymaximum :: Ord a => [a] -> a
-mymaximum [] = error "empty list"
-mymaximum [x] = x
-mymaximum (h:t) = if (h > k) then h else k
-    where k = mymaximum t
+mymaximum (h:t) = foldr max h t
+
+mymaximum2 :: Ord a => [a] -> a
+mymaximum2 [] = error "empty list"
+mymaximum2 [x] = x
+mymaximum2 (h:t) = if (h > k) then h else k
+    where k = mymaximum2 t
 
 -- minimum minimo de lista 
-myminimum :: Ord a => [a] -> a
-myminimum [] = error "empty list"
-myminimum [x] = x
-myminimum (h:t) = if (h < k) then h else k
-    where k = myminimum t
+myminimum (h:t) = foldr min h t
+
+myminimum2 :: Ord a => [a] -> a
+myminimum2 [] = error "empty list"
+myminimum2 [x] = x
+myminimum2 (h:t) = if (h < k) then h else k
+    where k = myminimum2 t
 
 -- * Building lists
-
 -- ** Scans
 -- scanl
 myscanl :: (b -> a -> b) -> b -> [a] -> [b] 
 myscanl f a [] = [a]
 myscanl f a (h:t) = a : myscanl f (f a h) t 
-
 -- scanl'
 -- scanl1
-
 -- scanr
 myscanr :: (a -> b -> b) -> b -> [a] -> [b]
 myscanr f a [] = [a]
 myscanr f a (h:t) = f h h2 : (h2:t2)  
     where (h2:t2) = myscanr f a t
-
-
 -- scanr1
-
+-- FIXME
 
 
 
