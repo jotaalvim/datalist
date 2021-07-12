@@ -128,16 +128,25 @@ myfoldl :: (b -> a -> b) -> b -> [a] -> b
 myfoldl f a [] = a
 myfoldl f a (h:t) = myfoldl f (f a h) t 
 
---   , foldl'
+-- foldl'
+-- FIXME
 -- foldl1 nao leva acumulador (é o primeiro elemntos)
---   , foldl1'
+myfoldl1 :: (a -> a -> a ) -> [a] -> a
+myfoldl1 f [x] = x 
+myfoldl1 f (h:t)  = foldl f h t
+-- foldl1'
 
 -- foldr
 myfoldr :: (a -> b -> b) -> b ->[a] -> b
 myfoldr f a [] = a
 myfoldr f a (h:t) = f h (myfoldr f a t)
--- FIXME
---   , foldr1
+-- foldr'
+-- foldr1
+myfoldr1 :: (a -> a -> a) -> [a] -> a
+myfoldr1 f [x] = x
+myfoldr1 f (h:t) = f h (myfoldr1 f t)
+
+-- foldr1'
 
 
 
@@ -243,7 +252,46 @@ myscanr f a [] = [a]
 myscanr f a (h:t) = f h h2 : (h2:t2)  
     where (h2:t2) = myscanr f a t
 -- scanr1
+-- scanr1'
+
 -- FIXME
+
+-- ** Accumulating maps
+-- mapAccumL
+-- mapAccumR
+
+-- ** Infinite lists
+-- iterate
+-- iterate'
+
+-- repeat
+-- repeat :: a -> [a]
+-- lista infinita de xs
+myrepeat x = k
+    where k = x:k
+
+myrepeat2 x = x:myrepeat2 x
+
+-- replicate
+-- replicate :: Int -> a -> [a]
+-- replica um x infinitamente
+myreplicate n x = [x | k <- [1..n] ]
+
+myreplicate2 n x = take n $ repeat x
+
+myreplicate3 0  _ = []
+myreplicate3 n  x = x: myreplicate3 (n-1) x
+
+-- cycle   
+-- cycle :: [a] -> [a]
+-- repete uma lista infinitamente
+mycycle l = k
+    where k = l ++ k
+
+mycycle2 l = l ++ mycycle2 l
+
+-- ** Unfolding
+-- unfoldr
 
 
 
