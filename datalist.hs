@@ -14,7 +14,10 @@ myhead [] = error "empty list"
 myhead (h:t) = h
 
 -- last ultimo elemento
---mylast (h:t) = foldr (id) h t 
+mylast (h:t) = foldl (\a x -> x) h t 
+--FIXME
+--mylast (h:t) = fold ( curry . fst ) h t 
+
 --FIXME
 
 mylast2 :: [a] -> a
@@ -86,7 +89,7 @@ intersperse2 a []    = []
 intersperse2 a [x]   = [x]
 intersperse2 a (h:t) = h:a:intersperse2 a t
 
-intersperse2 a l = tail $ concat [ a:[x] | x <- l ]
+intersperse3 a l = tail $ concat [ a:[x] | x <- l ]
    
 -- intercalate une uma lista de listas com outra lista
 intercalate :: [a] -> [[a]] -> [a] 
@@ -138,12 +141,19 @@ myfoldr f a (h:t) = f h (myfoldr f a t)
 --   , foldr1
 
 
+
+
 -- * Special folds
 
 -- concat concatena listas de listas
-myconcat :: [[a]] -> [a]
-myconcat [] = [] 
-myconcat (h:t) = h ++ myconcat t
+-- [ [1,2,3], [4,5,6],[7,8]]
+myconcat l = [ x | f <- l, x <- f]
+--myconcat2 l = [ x | x <- f ,f <- l] FIXME porque não funciona?
+--é possivel fazer um fold dentro de fold?
+
+myconcat2 :: [[a]] -> [a]
+myconcat2 [] = [] 
+myconcat2 (h:t) = h ++ myconcat2 t
 
 -- concatMap equivalente a concat $ map
 -- especie de fold com map? fold para subtituir o concat
@@ -162,15 +172,14 @@ myor False False = False
 myor _    _     = True
 
 -- any verifica se existe algum elemento se cumpre a condiçao numa lista 
-myany c l = foldr (\x a -> c x || a) False l
---myany3 c l = foldr ( c . || ) False l
---FIXME
+myany c l = foldr ( (||) . c ) False l
+
 myany2 :: (a -> Bool) -> [a] -> Bool
 myany2 c [] = False
 myany2 c (h:t) = c h || myany2 c t    
 
 -- all todos os elementos cumprem a condiçao
-myall c l = foldr (\x a -> c x && a) True l
+myall c l = foldr ( (&&) . c ) True l
 
 myall2 :: (a -> Bool) -> [a] -> Bool
 myall2 c [] = True
