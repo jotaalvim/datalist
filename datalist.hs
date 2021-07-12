@@ -14,16 +14,13 @@ myhead [] = error "empty list"
 myhead (h:t) = h
 
 -- last ultimo elemento
-mylast (h:t) = foldl (\a x -> x) h t 
---FIXME
---mylast (h:t) = fold ( curry . fst ) h t 
+mylast l = foldl1 (\a x -> x) l 
+mylast2 l = foldl1 ( curry snd ) l 
 
---FIXME
-
-mylast2 :: [a] -> a
-mylast2 [] = error "empty list"
-mylast2 [x] = x
-mylast2 (h:t) = mylast2 t
+mylast3 :: [a] -> a
+mylast3 [] = error "empty list"
+mylast3 [x] = x
+mylast3 (h:t) = mylast3 t
 
 -- tail cauda 
 mytail :: [a] -> [a]
@@ -83,6 +80,8 @@ myreverse3 [] = []
 myreverse3 (h:t) = myreverse3 t ++ [h]
 
 -- intersperse coloca um elemento no meio de todos de uma lista 
+--intersperse a l = foldr () [] l
+--FIXME
 
 intersperse2 :: a -> [a] -> [a]
 intersperse2 a []    = []
@@ -146,20 +145,25 @@ myfoldr f a (h:t) = f h (myfoldr f a t)
 -- * Special folds
 
 -- concat concatena listas de listas
--- [ [1,2,3], [4,5,6],[7,8]]
-myconcat l = [ x | f <- l, x <- f]
---myconcat2 l = [ x | x <- f ,f <- l] FIXME porque não funciona?
---é possivel fazer um fold dentro de fold?
+myconcat l = foldl1 (++) l 
+-- foldr1 é igual, nao muda a ordem
 
-myconcat2 :: [[a]] -> [a]
-myconcat2 [] = [] 
-myconcat2 (h:t) = h ++ myconcat2 t
+myconcat2 l  = [ x | f <- l, x <- f]
+-- myconcat2 l = [ x | x <- f ,f <- l] nao funciona
+--ordem importa la dentro
+
+myconcat3 :: [[a]] -> [a]
+myconcat3 [] = [] 
+myconcat3 (h:t) = h ++ myconcat3 t
 
 -- concatMap equivalente a concat $ map
--- especie de fold com map? fold para subtituir o concat
-myconcatMap :: (a -> [b]) -> [a] -> [b]
-myconcatMap f [] = []
-myconcatMap f (h:t) = f h ++ myconcatMap f t
+myconcatMap f l = foldr ( (++) . f ) [] l
+
+myconcatMap3 f l = foldr ( foldr (:) . f ) [] l
+
+myconcatMap2 :: (a -> [b]) -> [a] -> [b]
+myconcatMap2 f [] = []
+myconcatMap2 f (h:t) = f h ++ myconcatMap2 f t
 
 -- and
 myand :: Bool -> Bool -> Bool
@@ -172,50 +176,58 @@ myor False False = False
 myor _    _     = True
 
 -- any verifica se existe algum elemento se cumpre a condiçao numa lista 
-myany c l = foldr ( (||) . c ) False l
+myany f l = foldr ( (||) . f ) False l
 
 myany2 :: (a -> Bool) -> [a] -> Bool
-myany2 c [] = False
-myany2 c (h:t) = c h || myany2 c t    
+myany2 f [] = False
+myany2 f (h:t) = f h || myany2 f t    
 
 -- all todos os elementos cumprem a condiçao
-myall c l = foldr ( (&&) . c ) True l
+myall f l = foldr ( (&&) . f ) True l
 
 myall2 :: (a -> Bool) -> [a] -> Bool
-myall2 c [] = True
-myall2 c (h:t) = c h && myall2 c t
+myall2 f [] = True
+myall2 f (h:t) = f h && myall2 f t
 
 -- sum soma uma lista
-mysum l = foldr (+) 0 l
+mysum l = foldr1 (+) l
+
+mysum3 l = foldr (+) 0 l
 
 mysum2 :: Num a => [a] -> a
 mysum2 [] = 0
 mysum2 (h:t) = h + mysum2 t
 
 -- product produto de uma lista
-myproduct l = foldr (*) 1 l
+myproduct l = foldr1 (*) l
 
-myproduct2 :: Num a => [a] -> a
-myproduct2 [] = 1
-myproduct2 (h:t) = h * myproduct2 t
+myproduct2 l = foldr (*) 1 l
+
+myproduct3 :: Num a => [a] -> a
+myproduct3 [] = 1
+myproduct3 (h:t) = h * myproduct3 t
 
 -- maximum  máximo de lista
-mymaximum (h:t) = foldr max h t
+mymaximum l = foldr1 max l
 
-mymaximum2 :: Ord a => [a] -> a
-mymaximum2 [] = error "empty list"
-mymaximum2 [x] = x
-mymaximum2 (h:t) = if (h > k) then h else k
-    where k = mymaximum2 t
+mymaximum2 (h:t) = foldr max h t
+
+mymaximum3 :: Ord a => [a] -> a
+mymaximum3 [] = error "empty list"
+mymaximum3 [x] = x
+mymaximum3 (h:t) = if (h > k) then h else k
+    where k = mymaximum3 t
 
 -- minimum minimo de lista 
-myminimum (h:t) = foldr min h t
+myminimum l = foldr1 min l
 
-myminimum2 :: Ord a => [a] -> a
-myminimum2 [] = error "empty list"
-myminimum2 [x] = x
-myminimum2 (h:t) = if (h < k) then h else k
-    where k = myminimum2 t
+myminimum2 (h:t) = foldr min h t
+
+myminimum3 :: Ord a => [a] -> a
+myminimum3 [] = error "empty list"
+myminimum3 [x] = x
+myminimum3 (h:t) = if (h < k) then h else k
+    where k = myminimum3 t
 
 -- * Building lists
 -- ** Scans
