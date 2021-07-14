@@ -93,8 +93,6 @@ myreverse3 (h:t) = myreverse3 t ++ [h]
 -- intersperse 
 -- intersperse :: a -> [a] -> [a]
 -- coloca um elemento no meio de todos de uma lista 
--- FIXME
--- intersperse a l = foldr () [] l
 intersperse2 a []    = []
 intersperse2 a [x]   = [x]
 intersperse2 a (h:t) = h:a:intersperse2 a t
@@ -201,7 +199,7 @@ myand _    _    = False
 -- or
 -- or :: Bool -> Bool -> Bool
 myor False False = False
-myor _    _     = True
+myor _     _     = True
 
 -- any
 -- any :: (a -> Bool) -> [a] -> Bool
@@ -293,13 +291,14 @@ myscanr f a (h:t) = f h h2 : (h2:t2)
 -- ** Infinite lists
 
 -- iterate
-
-
+-- iterate :: (a -> a) -> a -> [a]  
+-- faz uma lista aplicando uma funçao a um acc para smepre
+myiterate f a = a : myiterate f (f a)
 -- iterate'
 
 -- repeat
 -- repeat :: a -> [a]
--- lista infinita de xs
+-- constroi uma lista com xs indefenidamente
 myrepeat x = k
     where k = x:k
 
@@ -307,7 +306,7 @@ myrepeat2 x = x:myrepeat2 x
 
 -- replicate
 -- replicate :: Int -> a -> [a]
--- replica um x infinitamente
+-- replica um x num numero de vezes especificoe
 myreplicate n x = [x | k <- [1..n] ]
 
 myreplicate2 n x = take n $ repeat x
@@ -327,17 +326,156 @@ mycycle2 l = l ++ mycycle2 l
 -- unfoldr
 
 
+--  * Sublists
+--
+--  ** Extracting sublists
+
+-- take
+-- take :: Int -> [a] -> [a]
+-- tira x elementos de uma lista
+mytake 0 _ = []
+mytake n (h:t) = h: mytake (n-1) t
+
+-- drop
+-- drop :: Int -> [a] -> [a]
+-- deixa cair x elemtnso de uma lista
+mydrop 0 l  = l
+mydrop x [] = []
+mydrop n (h:t) = mydrop (n-1) t
+
+-- splitAt
+-- splitAt :: Int -> [a] -> ([a],[a])
+-- divide uma lista num determinado indice
+--mysplitAt 0 l = mysplitAt ([],l) 
+mysplitAt x [] = ([],[]) 
+mysplitAt x (h:t) = (h:p,q)
+    where (p,q) = mysplitAt x t
+
+-- takeWhile
+-- dropWhile
+-- dropWhileEnd
+-- span
+-- break
+--
+-- stripPrefix
+--
+-- group
+--
+-- inits
+-- tails
+--
+--  ** Predicates
+-- isPrefixOf
+-- isSuffixOf
+-- isInfixOf
+-- isSubsequenceOf
+--
+--  * Searching lists
+--
+--  ** Searching by equality
+-- elem
+-- notElem
+-- lookup
+--
+--  ** Searching with a predicate
+-- find
+-- filter
+-- partition
+--
+--  * Indexing lists
+--  | These functions treat a list @xs@ as a indexed collection,
+--  with indices ranging from 0 to @'length' xs - 1@.
+--
+-- (!!)
+--
+-- elemIndex
+-- elemIndices
+--
+-- findIndex
+-- findIndices
+--
+--  * Zipping and unzipping lists
+--
+-- zip
+-- zip3
+-- zip4, zip5, zip6, zip7
+--
+-- zipWith
+-- zipWith3
+-- zipWith4, zipWith5, zipWith6, zipWith7
+--
+-- unzip
+-- unzip3
+-- unzip4, unzip5, unzip6, unzip7
+--
+--  * Special lists
+--
+--  ** Functions on strings
+-- lines
+-- words
+-- unlines
+-- unwords
+--
+--  ** \"Set\" operations
+--
+-- nub
+--
+-- delete
+-- delete :: Eq a => a -> [a] -> [a]
+-- delete apaga a primeira ocorrencia 
+delete x [] = []
+delete x (h:t)
+    | x == h = t
+    | otherwise = h: delete x t
+
+-- (\\)
+--
+-- union
+-- intersect
+--
+--  ** Ordered lists
+-- sort
+-- sortOn
+-- insert
+--
+--  * Generalized functions
+--
+--  ** The \"@By@\" operations
+--  | By convention, overloaded functions have a non-overloaded
+--  counterpart whose name is suffixed with \`@By@\'.
+-- 
+--  It is often convenient to use these functions together with
+--  'Data.Function.on', for instance @'sortBy' ('Prelude.compare'
+--  ``Data.Function.on`` 'Prelude.fst')@.
+--
+--  *** User-supplied equality (replacing an @Eq@ context)
+--  | The predicate is assumed to define an equivalence.
+-- nubBy
+-- deleteBy
+-- deleteFirstsBy
+-- unionBy
+-- intersectBy
+-- groupBy
+--
+--  *** User-supplied comparison (replacing an @Ord@ context)
+--  | The function is assumed to define a total ordering.
+-- sortBy
+-- insertBy
+-- maximumBy
+-- minimumBy
+--
+--
+-- genericLength
+-- genericTake
+-- genericDrop
+-- genericSplitAt
+-- genericIndex
+-- genericReplicate
 
 
 
 ---------------------------------------------------------------------------
 
--- delete apaga a primeira ocorrencia 
-delete :: Eq a => a -> [a] -> [a]
-delete x [] = []
-delete x (h:t)
-    | x == h = t
-    | otherwise = h: delete x t
 ------------------------------
 -- apaga um indice
 delete2 :: Int -> [a] -> [a]
