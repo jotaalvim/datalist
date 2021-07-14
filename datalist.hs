@@ -387,7 +387,17 @@ mysplitAt x (h:t) = (h:p,q)
 --  with indices ranging from 0 to @'length' xs - 1@.
 --
 -- (!!)
---
+-- !! :: Eq a => [a] -> Int -> a
+-- seleciona um indice numa lista
+pp [] x = error "empty list"
+pp (h:t) x | x == 0 = h
+           | otherwise = pp t (x-1) 
+-o
+s
+s
+s
+s
+s-
 -- elemIndex
 -- elemIndices
 --
@@ -484,10 +494,5 @@ delete2 0 (h:t) = t
 delete2 n (h:t) = h: delete2 (n-1) t 
 -------------------
 
--- (!!) seleciona um indice numa lista
-pp :: Eq a => [a] -> Int -> a
-pp [] x = error "empty list"
-pp (h:t) x | x == 0 = h
-           | otherwise = pp t (x-1) 
 
 
