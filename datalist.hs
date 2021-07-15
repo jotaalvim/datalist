@@ -5,8 +5,8 @@
 -- concatena listas
 mm a b = foldr (:) b a
 
-mm2 [] l = l
-mm2 l [] = l
+mm2 [] l = l 
+mm2 l [] = l 
 mm2 (h:t) l2 = h : mm2 t l2
 
 -- head
@@ -324,7 +324,7 @@ mycycle2 l = l ++ mycycle2 l
 
 -- ** Unfolding
 -- unfoldr
-
+--FIXME
 
 --  * Sublists
 --
@@ -346,15 +346,39 @@ mydrop n (h:t) = mydrop (n-1) t
 -- splitAt
 -- splitAt :: Int -> [a] -> ([a],[a])
 -- divide uma lista num determinado indice
---mysplitAt 0 l = mysplitAt ([],l) 
+mysplitAt 0 l = ([],l) 
 mysplitAt x [] = ([],[]) 
 mysplitAt x (h:t) = (h:p,q)
     where (p,q) = mysplitAt x t
 
 -- takeWhile
+-- takeWhile :: (a -> Bool) -> [a] -> [a] 
+-- retira enquanto uma f se aplicar
+mytakeWhile f [] = []
+mytakeWhile f (h:t)
+    | f h = h: mytakeWhile f t
+    | otherwise = [] 
+
 -- dropWhile
+-- dropWhile :: (a -> Bool) -> [a] -> [a]
+-- faz drop até que a f falhe
+mydropWhile f [] = []
+mydropWhile f (h:t)
+    | f h = mydropWhile f t
+    | otherwise = h:t
+
 -- dropWhileEnd
+-- FIXME
+
 -- span
+-- span :: (a -> Bool) -> [a] -> ([a],[a]) 
+-- divide em dois por um take while?
+myspan f [] = ([],[])
+myspan f (h:t)
+    | f h = (h:p,q)
+    | otherwise = (p,h:t)
+    where (p,q) = myspan f t
+
 -- break
 --
 -- stripPrefix
@@ -385,19 +409,14 @@ mysplitAt x (h:t) = (h:p,q)
 --  * Indexing lists
 --  | These functions treat a list @xs@ as a indexed collection,
 --  with indices ranging from 0 to @'length' xs - 1@.
---
+
 -- (!!)
 -- !! :: Eq a => [a] -> Int -> a
 -- seleciona um indice numa lista
 pp [] x = error "empty list"
 pp (h:t) x | x == 0 = h
            | otherwise = pp t (x-1) 
--o
-s
-s
-s
-s
-s-
+
 -- elemIndex
 -- elemIndices
 --
@@ -485,8 +504,6 @@ delete x (h:t)
 
 
 ---------------------------------------------------------------------------
-
-------------------------------
 -- apaga um indice
 delete2 :: Int -> [a] -> [a]
 delete2 _ [] = []
