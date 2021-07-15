@@ -384,6 +384,15 @@ myspan f (h:t)
 -- stripPrefix
 --
 -- group
+-- group :: Eq a => [a] -> [[a]]
+-- agrupa os elementos iguais
+mygroup [] = []
+mygroup [x] = [[x]]
+mygroup (h:t)
+    | h == h2 = (h:h2:t2):tf
+    | otherwise = [h]:(h2:t2):tf
+    where ((h2:t2):tf) = mygroup t
+
 --
 -- inits
 -- tails
