@@ -20,10 +20,11 @@ myhead (h:t) = h
 -- ultimo elemento
 mylast l = foldl1 (\a x -> x) l 
 mylast2 l = foldl1 ( curry snd ) l 
+mylast3 l = foldr1 ( curry snd ) l 
 
-mylast3 [] = error "empty list"
-mylast3 [x] = x
-mylast3 (h:t) = mylast3 t
+mylast4 [] = error "empty list"
+mylast4 [x] = x
+mylast4 (h:t) = mylast4 t
 
 -- tail 
 -- tail :: [a] -> [a]
@@ -59,6 +60,7 @@ mynull  _ = False
 -- length :: [a] -> Int 
 -- tamanho de uma lista 
 mylength l = foldr (\x a-> a+1) 0 l
+mylength3 l = foldl ( curry fst . (+1) ) 0 l
 
 mylength2 [] = 0
 mylength2 (h:t) = 1 + mylength2 t
@@ -180,6 +182,10 @@ myconcat2 l  = [ x | f <- l, x <- f]
 
 myconcat3 [] = [] 
 myconcat3 (h:t) = h ++ myconcat3 t
+
+--FIXME 
+myconcat4 l = foldr  ( foldr (:) ) [] l
+myconcat5 l = foldl  ( foldr (:) ) [] l
 
 -- concatMap 
 -- concatMap :: (a -> [b]) -> [a] -> [b]
@@ -393,8 +399,9 @@ mygroup (h:t)
     | otherwise = [h]:(h2:t2):tf
     where ((h2:t2):tf) = mygroup t
 
---
 -- inits
+-- inits :: [a] -> [[a]]
+-- 
 -- tails
 --
 --  ** Predicates
