@@ -440,8 +440,9 @@ pp (h:t) x | x == 0 = h
 -- findIndices
 --
 --  * Zipping and unzipping lists
---
+
 -- zip
+
 -- zip3
 -- zip4, zip5, zip6, zip7
 --
@@ -462,9 +463,15 @@ pp (h:t) x | x == 0 = h
 -- unwords
 --
 --  ** \"Set\" operations
---
+
 -- nub
---
+-- nub :: Eq a => [a] -> [a]
+-- retira elemtos repetidos
+mynub [] = []
+mynub (h:t) 
+    | elem h t = mynub t
+    | otherwise = h:mynub t
+
 -- delete
 -- delete :: Eq a => a -> [a] -> [a]
 -- delete apaga a primeira ocorrencia 
