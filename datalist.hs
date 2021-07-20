@@ -401,7 +401,14 @@ mygroup (h:t)
 
 -- inits
 -- inits :: [a] -> [[a]]
--- 
+-- inits "abcd" = ["","a","ab","abc","abcd"]
+myinits [] = [[]]
+myinits l =  myinits (init l) ++ [l]
+
+myinits2 [] = [[]]
+myinits2 l = l: (h2:t2)
+    where (h2:t2) = myinits2 ( init l ) 
+
 -- tails
 --
 --  ** Predicates
@@ -413,7 +420,15 @@ mygroup (h:t)
 --  * Searching lists
 --
 --  ** Searching by equality
+
 -- elem
+-- elem :: Eq a => [a] -> Bool
+myelem _ [] = False
+myelem x (h:t) 
+    | x == h = True
+    | otherwise = myelem x t
+
+myelem x l = foldl ( (== x) . (||) ) False l
 -- notElem
 -- lookup
 --
