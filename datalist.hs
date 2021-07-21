@@ -386,6 +386,9 @@ myspan f (h:t)
     where (p,q) = myspan f t
 
 -- break
+-- QUAL È A DIFERENÇA ENTRE O BREA E O SPAN
+--
+--
 --
 -- stripPrefix
 --
@@ -410,6 +413,10 @@ myinits2 l = l: (h2:t2)
     where (h2:t2) = myinits2 ( init l ) 
 
 -- tails
+-- tails :: [a] -> [[a]]
+-- mytails "abcd" ["abcd","bcd","cd","d",""]
+mytails [] = [[]]
+mytails l = l : mytails (tail l)
 --
 --  ** Predicates
 -- isPrefixOf
@@ -428,7 +435,9 @@ myelem x (h:t)
     | x == h = True
     | otherwise = myelem x t
 
-myelem x l = foldl ( (== x) . (||) ) False l
+--myelem x l = foldl ( (== x) . (||) ) False l
+--FIXME
+
 -- notElem
 -- lookup
 --
@@ -457,7 +466,12 @@ pp (h:t) x | x == 0 = h
 --  * Zipping and unzipping lists
 
 -- zip
+-- zip :: [a] -> [b] -> [(a,b)]
+myzip [] _ = [] 
+myzip _ [] = [] 
+myzip (h:t) (h2:t2) = (h,h2):myzip t t2
 
+myzip2 l1 l2 = [(x,y)  |  x <- l1, y <- l2 ] -- todas as combinações 
 -- zip3
 -- zip4, zip5, zip6, zip7
 --
