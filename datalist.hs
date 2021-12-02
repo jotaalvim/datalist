@@ -2,7 +2,7 @@
 
 -- (++) 
 -- (++) :: [a] -> [a] -> [a]
--- concatena listas
+-- concatenate 2 list
 mm a b = foldr (:) b a
 
 mm2 [] l = l 
@@ -11,13 +11,11 @@ mm2 (h:t) l2 = h : mm2 t l2
 
 -- head
 -- head :: [a] -> a
--- cabeça de lista
 myhead [] = error "empty list"
 myhead (h:t) = h
 
 -- last 
 -- last :: [a] -> a
--- ultimo elemento
 mylast l = foldl1 (\a x -> x) l 
 mylast2 l = foldl1 ( curry snd ) l 
 mylast3 l = foldr1 ( curry snd ) l 
@@ -28,37 +26,35 @@ mylast4 (h:t) = mylast4 t
 
 -- tail 
 -- tail :: [a] -> [a]
--- cauda 
 mytail [] = error "empty list"
 mytail (h:t) = t 
 
 -- init
 -- init :: [a] -> [a]
--- todos menos o último
+-- all elems but not the last
 myinit [] = error "empty list"
 myinit [x] = []
 myinit (h:t) = h:myinit t
 
 -- uncons
 -- uncons :: [a] -> Maybe (a,[a])
--- decompoe uma lista em Just (cabeaça,cauda) ou Nothing
+-- decomposes a lista in Just (head,tail) or Nothing
+-- uncons [1,2,3,4] = Just (1,[2,3,4])
 uncons [] = Nothing
 uncons (h:t) = Just (h,t)
 
 -- singleton 
 -- singleton :: a -> [a]
--- faz lista singuar
+-- singular list
 singleton x = [x]
 
 -- null 
 -- null :: [a] -> Bool
--- ve se uma lista é nula  
 mynull [] = True
 mynull  _ = False
 
 -- length 
 -- length :: [a] -> Int 
--- tamanho de uma lista 
 mylength l = foldr (\x a-> a+1) 0 l
 mylength3 l = foldl ( curry fst . (+1) ) 0 l
 
@@ -70,7 +66,7 @@ mylength2 (h:t) = 1 + mylength2 t
 
 -- map 
 -- map :: (a -> b) -> [a] -> [b]
--- aplica uma funçao a todos os elementos de uma lista
+-- aplies a function to every element in a list
 mymap f l = foldr ( (:) . f ) [] l
 
 mymap2 f [] = []
@@ -80,9 +76,8 @@ mymap3 f l = [ f x | x <- l ]
    
 -- reverse 
 -- reverse :: [a] -> [a]
--- inverte uma lista
 myreverse l = foldl ( flip (:) ) [] l
-
+-- fast reverse ↓
 myreverse2 l = revaux l []
 
 revaux :: [a] -> [a] -> [a]
@@ -94,7 +89,7 @@ myreverse3 (h:t) = myreverse3 t ++ [h]
 
 -- intersperse 
 -- intersperse :: a -> [a] -> [a]
--- coloca um elemento no meio de todos de uma lista 
+-- puts an x inbetween all elements in a list 
 intersperse2 a []    = []
 intersperse2 a [x]   = [x]
 intersperse2 a (h:t) = h:a:intersperse2 a t
@@ -103,7 +98,7 @@ intersperse3 a l = tail $ concat [ a:[x] | x <- l ]
    
 -- intercalate 
 -- intercalate :: [a] -> [[a]] -> [a] 
--- une uma lista de listas com outra lista
+-- concats all elements in a list with another list in between them
 intercalate a []    = []
 intercalate a [l] = l 
 intercalate a (h:t) = h ++ a ++ intercalate a t
@@ -112,21 +107,21 @@ intercalate3 a (h:t) = concat $ h : [ a ++ x | x <- t ]
 
 -- traspose 
 -- transpose :: [[a]] -> [[a]] 
--- matriz transposta 
+-- transposed matrix
 --transpose l = [ map (!! k) l | k <- [0..(length $ head l) - 1] ]
 transpose l = [[ linha !! k | linha <- l, k < length linha ] | k <- [0.. t-1]]
     where t = maximum $ map length l
 
 -- subsequences
 -- subsequences :: [a] -> [[a]]
--- subsequencias 
+-- subsequences of a list 
 subsequences [] = [[]]
 subsequences (h:t)  = [ h:x | x <- l ]  ++ l
     where l = subsequences t
 
 -- permutations 
 -- permutations :: [a] -> [[a]]
--- permuta uma lista
+-- permutations of a list
 permutations [] = [[]]
 permutations l = [ (l!!k):x 
                   | k <- [0..length l-1]
@@ -134,7 +129,7 @@ permutations l = [ (l!!k):x
 
 permutations2 [] = [[]]
 ----permutations l = [ map  (: l!!k ) (permutations (delete (l!!k) l)) | k <- [0..length l -1] ]  
-permutations2 l = concat [ map ( (:)(l!!k) ) (permutations $ delete2 k l ) | k <- [0..length l-1] ]  
+permutations2 l = concat [ map ( (:) (l!!k) ) (permutations $ delete2 k l ) | k <- [0..length l-1] ]  
 
  -- * Reducing lists (folds)
 
@@ -148,7 +143,7 @@ myfoldl f a (h:t) = myfoldl f (f a h) t
 
 -- foldl1
 -- foldl1 :: (a -> a -> a ) -> [a] -> a
--- nao leva acumulador (é o primeiro elemntos)
+-- uses the first element as the accumutalor 
 myfoldl1 f [x] = x 
 myfoldl1 f (h:t)  = foldl f h t
 
@@ -162,23 +157,22 @@ myfoldr f a (h:t) = f h (myfoldr f a t)
 
 -- foldr1
 -- foldr1 :: (a -> a -> a) -> [a] -> a
--- foldr1 é igual, nao muda a ordem
+-- it dosen't change order 
 myfoldr1 f [x] = x
 myfoldr1 f (h:t) = f h (myfoldr1 f t)
 
 -- foldr1'
-
+-- FIXME
 
 -- * Special folds
 
 -- concat 
 -- concat :: [[a]] -> [a]
--- concatena listas de listas
+-- concatenate all ellements in a list
 myconcat l = foldl1 (++) l 
 
-myconcat2 l  = [ x | f <- l, x <- f]
--- myconcat2 l = [ x | x <- f ,f <- l] nao funciona
---ordem importa la dentro
+myconcat2 l  = [ x | f <- l, x <- f ]
+-- myconcat2 l = [ x | x <- f ,f <- l] dosen't work, order matters
 
 myconcat3 [] = [] 
 myconcat3 (h:t) = h ++ myconcat3 t
@@ -189,7 +183,7 @@ myconcat5 l = foldl  ( foldr (:) ) [] l
 
 -- concatMap 
 -- concatMap :: (a -> [b]) -> [a] -> [b]
--- equivalente a concat $ map
+-- concatenates and applies a function to all elements
 myconcatMap f l = foldr ( (++) . f ) [] l
 
 myconcatMap3 f l = foldr ( foldr (:) . f ) [] l
@@ -209,7 +203,7 @@ myor _     _     = True
 
 -- any
 -- any :: (a -> Bool) -> [a] -> Bool
--- verifica se existe algum elemento se cumpre a condiçao numa lista 
+-- check if at least 1 element is true in that condition
 myany f l = foldr ( (||) . f ) False l
 
 myany2 f [] = False
@@ -217,7 +211,7 @@ myany2 f (h:t) = f h || myany2 f t
 
 -- all 
 -- all :: (a -> Bool) -> [a] -> Bool
--- todos os elementos cumprem a condiçao
+-- all elements must be true in that condition 
 myall f l = foldr ( (&&) . f ) True l
 
 myall2 f [] = True
@@ -225,7 +219,6 @@ myall2 f (h:t) = f h && myall2 f t
 
 -- sum 
 -- sum :: Num a => [a] -> a
--- soma uma lista
 mysum l = foldr1 (+) l
 
 mysum3 l = foldr (+) 0 l
@@ -235,7 +228,7 @@ mysum2 (h:t) = h + mysum2 t
 
 -- product 
 -- product :: Num a => [a] -> a
--- produto de uma lista
+-- product of all elements in a list
 myproduct l = foldr1 (*) l
 
 myproduct2 l = foldr (*) 1 l
@@ -245,7 +238,7 @@ myproduct3 (h:t) = h * myproduct3 t
 
 -- maximum  
 -- maximum :: Ord a => [a] -> a
--- máximo de lista
+-- biggest element of the list
 mymaximum l = foldr1 max l
 
 mymaximum2 (h:t) = foldr max h t
@@ -257,7 +250,7 @@ mymaximum3 (h:t) = if (h > k) then h else k
 
 -- minimum 
 -- minimum :: Ord a => [a] -> a
--- minimo de lista 
+-- lowest element in a list
 myminimum l = foldr1 min l
 
 myminimum2 (h:t) = foldr min h t
@@ -272,7 +265,7 @@ myminimum3 (h:t) = if (h < k) then h else k
 
 -- scanl
 -- scanl :: (b -> a -> b) -> b -> [a] -> [b] 
--- é um fold mas guarda o acuulador na várias etapas
+-- it's a fold but makes a list with all the accumulators 
 myscanl f a [] = [a]
 myscanl f a (h:t) = a : myscanl f (f a h) t 
 
@@ -414,18 +407,29 @@ myinits2 l = l: (h2:t2)
 
 -- tails
 -- tails :: [a] -> [[a]]
--- mytails "abcd" ["abcd","bcd","cd","d",""]
+-- mytails "abcd" = ["abcd","bcd","cd","d",""]
 mytails [] = [[]]
 mytails l = l : mytails (tail l)
---
+
 --  ** Predicates
+--
 -- isPrefixOf
+-- isPrefixOf :: Eq a => [a] -> [a] -> Bool
+myisPrefixOf [] _ = True
+myisPrefixOf (h:t) (h2:t2) = h == h2 && myisPrefixOf t t2
+
 -- isSuffixOf
+-- isSuffixOf :: Eq a => [a] -> [a] -> Bool
+myisSuffixOf [] _ = True
+myisSuffixOf l l2 = f == f2 && myisSuffixOf FIXEM  
+    where f  = last l
+          f2 = last l2
+
 -- isInfixOf
 -- isSubsequenceOf
---
+
 --  * Searching lists
---
+
 --  ** Searching by equality
 
 -- elem

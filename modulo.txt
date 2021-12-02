@@ -1,7 +1,6 @@
 module Data.List
    (
    -- * Basic functions
-Sim
 
      (++)
    , head
