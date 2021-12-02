@@ -1,4 +1,4 @@
-## Data.List
+# Data.List
 
 In here you'll find all the functions from Data.List implemented, most of them are defined in 2 or 3 different ways
 
