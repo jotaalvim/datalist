@@ -16,9 +16,9 @@ myhead (h:t) = h
 
 -- last 
 -- last :: [a] -> a
-mylast l = foldl1 (\a x -> x) l 
-mylast2 l = foldl1 ( curry snd ) l 
-mylast3 l = foldr1 ( curry snd ) l 
+mylast = foldl1 (\a x -> x) 
+mylast2 = foldl1 ( curry snd ) 
+mylast3 = foldr1 ( curry snd )
 
 mylast4 [] = error "empty list"
 mylast4 [x] = x
@@ -55,8 +55,8 @@ mynull  _ = False
 
 -- length 
 -- length :: [a] -> Int 
-mylength l = foldr (\x a-> a+1) 0 l
-mylength3 l = foldl ( curry fst . (+1) ) 0 l
+mylength = foldr (\x a-> a+1) 0
+mylength3 = foldl ( curry fst . (+1) ) 0
 
 mylength2 [] = 0
 mylength2 (h:t) = 1 + mylength2 t
@@ -67,7 +67,7 @@ mylength2 (h:t) = 1 + mylength2 t
 -- map 
 -- map :: (a -> b) -> [a] -> [b]
 -- aplies a function to every element in a list
-mymap f l = foldr ( (:) . f ) [] l
+mymap f = foldr ( (:) . f ) []
 
 mymap2 f [] = []
 mymap2 f (h:t) = f h : mymap2 f t
@@ -76,7 +76,7 @@ mymap3 f l = [ f x | x <- l ]
    
 -- reverse 
 -- reverse :: [a] -> [a]
-myreverse l = foldl ( flip (:) ) [] l
+myreverse = foldl ( flip (:) ) []
 -- fast reverse ↓
 myreverse2 l = revaux l []
 
@@ -138,8 +138,6 @@ permutations2 l = concat [ map ( (:) (l!!k) ) (permutations $ delete2 k l ) | k 
 myfoldl f a [] = a
 myfoldl f a (h:t) = myfoldl f (f a h) t 
 
--- foldl'
--- FIXME
 
 -- foldl1
 -- foldl1 :: (a -> a -> a ) -> [a] -> a
@@ -147,13 +145,11 @@ myfoldl f a (h:t) = myfoldl f (f a h) t
 myfoldl1 f [x] = x 
 myfoldl1 f (h:t)  = foldl f h t
 
--- foldl1'
 
 -- foldr
 -- foldr :: (a -> b -> b) -> b ->[a] -> b
 myfoldr f a [] = a
 myfoldr f a (h:t) = f h (myfoldr f a t)
--- foldr'
 
 -- foldr1
 -- foldr1 :: (a -> a -> a) -> [a] -> a
@@ -161,15 +157,12 @@ myfoldr f a (h:t) = f h (myfoldr f a t)
 myfoldr1 f [x] = x
 myfoldr1 f (h:t) = f h (myfoldr1 f t)
 
--- foldr1'
--- FIXME
-
 -- * Special folds
 
 -- concat 
 -- concat :: [[a]] -> [a]
 -- concatenate all ellements in a list
-myconcat l = foldl1 (++) l 
+myconcat = foldl1 (++)
 
 myconcat2 l  = [ x | f <- l, x <- f ]
 -- myconcat2 l = [ x | x <- f ,f <- l] dosen't work, order matters
@@ -177,16 +170,15 @@ myconcat2 l  = [ x | f <- l, x <- f ]
 myconcat3 [] = [] 
 myconcat3 (h:t) = h ++ myconcat3 t
 
---FIXME 
-myconcat4 l = foldr  ( foldr (:) ) [] l
-myconcat5 l = foldl  ( foldr (:) ) [] l
+myconcat4 = foldr  ( foldr (:) ) [] 
+myconcat5 = foldl  ( foldr (:) ) []
 
 -- concatMap 
 -- concatMap :: (a -> [b]) -> [a] -> [b]
 -- concatenates and applies a function to all elements
-myconcatMap f l = foldr ( (++) . f ) [] l
+myconcatMap f = foldr ( (++) . f ) []
 
-myconcatMap3 f l = foldr ( foldr (:) . f ) [] l
+myconcatMap3 f = foldr ( foldr (:) . f ) []
 
 myconcatMap2 f [] = []
 myconcatMap2 f (h:t) = f h ++ myconcatMap2 f t
@@ -203,15 +195,13 @@ myor _     _     = True
 
 -- any
 -- any :: (a -> Bool) -> [a] -> Bool
--- check if at least 1 element is true in that condition
-myany f l = foldr ( (||) . f ) False l
+myany f = foldr ( (||) . f ) False
 
 myany2 f [] = False
 myany2 f (h:t) = f h || myany2 f t    
 
 -- all 
 -- all :: (a -> Bool) -> [a] -> Bool
--- all elements must be true in that condition 
 myall f l = foldr ( (&&) . f ) True l
 
 myall2 f [] = True
@@ -219,19 +209,18 @@ myall2 f (h:t) = f h && myall2 f t
 
 -- sum 
 -- sum :: Num a => [a] -> a
-mysum l = foldr1 (+) l
+mysum  = foldr1 (+) 
 
-mysum3 l = foldr (+) 0 l
+mysum3  = foldr (+) 0 
 
 mysum2 [] = 0
 mysum2 (h:t) = h + mysum2 t
 
 -- product 
 -- product :: Num a => [a] -> a
--- product of all elements in a list
-myproduct l = foldr1 (*) l
+myproduct = foldr1 (*) 
 
-myproduct2 l = foldr (*) 1 l
+myproduct2 = foldr (*) 1
 
 myproduct3 [] = 1
 myproduct3 (h:t) = h * myproduct3 t
@@ -239,7 +228,7 @@ myproduct3 (h:t) = h * myproduct3 t
 -- maximum  
 -- maximum :: Ord a => [a] -> a
 -- biggest element of the list
-mymaximum l = foldr1 max l
+mymaximum = foldr1 max
 
 mymaximum2 (h:t) = foldr max h t
 
@@ -251,7 +240,7 @@ mymaximum3 (h:t) = if (h > k) then h else k
 -- minimum 
 -- minimum :: Ord a => [a] -> a
 -- lowest element in a list
-myminimum l = foldr1 min l
+myminimum = foldr1 min
 
 myminimum2 (h:t) = foldr min h t
 
@@ -269,7 +258,6 @@ myminimum3 (h:t) = if (h < k) then h else k
 myscanl f a [] = [a]
 myscanl f a (h:t) = a : myscanl f (f a h) t 
 
--- scanl'
 -- scanl1
 
 -- scanr
@@ -279,7 +267,6 @@ myscanr f a (h:t) = f h h2 : (h2:t2)
     where (h2:t2) = myscanr f a t
 
 -- scanr1
--- scanr1'
 
 -- FIXME
 
@@ -305,17 +292,17 @@ myrepeat2 x = x:myrepeat2 x
 
 -- replicate
 -- replicate :: Int -> a -> [a]
--- replica um x num numero de vezes especificoe
 myreplicate n x = [x | k <- [1..n] ]
 
 myreplicate2 n x = take n $ repeat x
+myreplicate20 n = (take n) . repeat
+myreplicate21 =  (. repeat ) . take
 
 myreplicate3 0  _ = []
 myreplicate3 n  x = x: myreplicate3 (n-1) x
 
 -- cycle   
 -- cycle :: [a] -> [a]
--- repete uma lista infinitamente
 mycycle l = k
     where k = l ++ k
 
@@ -331,20 +318,17 @@ mycycle2 l = l ++ mycycle2 l
 
 -- take
 -- take :: Int -> [a] -> [a]
--- tira x elementos de uma lista
 mytake 0 _ = []
 mytake n (h:t) = h: mytake (n-1) t
 
 -- drop
 -- drop :: Int -> [a] -> [a]
--- deixa cair x elemtnso de uma lista
 mydrop 0 l  = l
 mydrop x [] = []
 mydrop n (h:t) = mydrop (n-1) t
 
 -- splitAt
 -- splitAt :: Int -> [a] -> ([a],[a])
--- divide uma lista num determinado indice
 mysplitAt 0 l = ([],l) 
 mysplitAt x [] = ([],[]) 
 mysplitAt x (h:t) = (h:p,q)
@@ -352,7 +336,6 @@ mysplitAt x (h:t) = (h:p,q)
 
 -- takeWhile
 -- takeWhile :: (a -> Bool) -> [a] -> [a] 
--- retira enquanto uma f se aplicar
 mytakeWhile f [] = []
 mytakeWhile f (h:t)
     | f h = h: mytakeWhile f t
@@ -360,7 +343,6 @@ mytakeWhile f (h:t)
 
 -- dropWhile
 -- dropWhile :: (a -> Bool) -> [a] -> [a]
--- faz drop até que a f falhe
 mydropWhile f [] = []
 mydropWhile f (h:t)
     | f h = mydropWhile f t
@@ -420,11 +402,11 @@ myisPrefixOf (h:t) (h2:t2) = h == h2 && myisPrefixOf t t2
 
 -- isSuffixOf
 -- isSuffixOf :: Eq a => [a] -> [a] -> Bool
-myisSuffixOf [] _ = True
-myisSuffixOf l l2 = f == f2 && myisSuffixOf FIXEM  
-    where f  = last l
-          f2 = last l2
-
+-- FIXME
+--myisSuffixOf [] _ = True
+--myisSuffixOf l l2 = f == f2 && myisSuffixOf FIXEM  
+--    where f  = last l
+--          f2 = last l2 
 -- isInfixOf
 -- isSubsequenceOf
 
@@ -475,10 +457,23 @@ myzip [] _ = []
 myzip _ [] = [] 
 myzip (h:t) (h2:t2) = (h,h2):myzip t t2
 
-myzip2 l1 l2 = [(x,y)  |  x <- l1, y <- l2 ] -- todas as combinações 
+myzip2 l1 l2 = [(x,y)  |  x <- l1, y <- l2 ]
+
 -- zip3
--- zip4, zip5, zip6, zip7
---
+myzip3 l1 l2 l3 = [(x,y,z)  |  x <- l1, y <- l2, z <- l3 ]
+
+--zip 4
+myzip4 l1 l2 l3 l4 = [(x,y,z,a)  |  x <- l1, y <- l2, z <- l3, a <- l4]
+
+--zip 5
+myzip5 l1 l2 l3 l4 l5 = [(x,y,z,a,b)  |  x <- l1, y <- l2, z <- l3, a <- l4, b <- l5]
+
+--zip 6
+myzip6 l1 l2 l3 l4 l5 l6 = [(x,y,z,a,b,c)  |  x <- l1, y <- l2, z <- l3, a <- l4, b <- l5, c <- l6]
+
+--zip 7
+myzip7 l1 l2 l3 l4 l5 l6 l7 = [(x,y,z,a,b,c,d)  |  x <- l1, y <- l2, z <- l3, a <- l4, b <- l5, c <- l6, d <- l7]
+
 -- zipWith
 -- zipWith3
 -- zipWith4, zipWith5, zipWith6, zipWith7
@@ -490,7 +485,19 @@ myzip2 l1 l2 = [(x,y)  |  x <- l1, y <- l2 ] -- todas as combinações
 --  * Special lists
 --
 --  ** Functions on strings
+
 -- lines
+-- lines :: String -> [String]
+mylines "" = []
+mylines (a:t) = charin a  $ mylines t
+
+mylines2 = foldr charin []
+
+charin :: Char -> [String] -> [String]  
+charin a [] = ["a"]
+charin '\n' l = "":l
+charin a (x:y) = (a:x): y
+
 -- words
 -- unlines
 -- unwords
