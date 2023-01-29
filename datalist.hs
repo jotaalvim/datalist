@@ -425,13 +425,26 @@ myelem x (h:t)
 --FIXME
 
 -- notElem
+-- notElem :: (Foldable t, Eq a) => a -> t a -> Bool
+
 -- lookup
---
+-- lookup :: Eq a => a -> [(a, b)] -> Maybe b
+mylookup a [] = Nothing
+mylookup a ((c,b):cs)
+    | a == c = Just b
+    | otherwise = mylookup a cs
+
 --  ** Searching with a predicate
 -- find
+-- find :: Foldable t => (a -> Bool) -> t a -> Maybe a
+
 -- filter
+-- filter :: (a -> Bool) -> [a] -> [a]
+
 -- partition
---
+-- partition :: (a -> Bool) -> [a] -> ([a], [a])
+
+
 --  * Indexing lists
 --  | These functions treat a list @xs@ as a indexed collection,
 --  with indices ranging from 0 to @'length' xs - 1@.
