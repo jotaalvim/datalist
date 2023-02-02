@@ -512,6 +512,15 @@ charin '\n' l = "":l
 charin a (x:y) = (a:x): y
 
 -- words
+mywords :: String -> [String]
+mywords = foldr breakW []
+
+breakW  :: Char -> [String] -> [String]
+breakW  a []   = ["a"]
+breakW ' ' l   = "":l
+breakW c (a:b) = (c:a):b
+
+
 -- unlines
 -- unwords
 --
