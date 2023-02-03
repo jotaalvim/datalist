@@ -280,7 +280,6 @@ myscanr f a (h:t) = f h h2 : (h2:t2)
 -- iterate :: (a -> a) -> a -> [a]  
 -- faz uma lista aplicando uma funçao a um acc para smepre
 myiterate f a = a : myiterate f (f a)
--- iterate'
 
 -- repeat
 -- repeat :: a -> [a]
@@ -310,10 +309,9 @@ mycycle2 l = l ++ mycycle2 l
 
 -- ** Unfolding
 -- unfoldr
---FIXME
+-- anamorfismo
 
 --  * Sublists
---
 --  ** Extracting sublists
 
 -- take
@@ -394,7 +392,6 @@ mytails [] = [[]]
 mytails l = l : mytails (tail l)
 
 --  ** Predicates
---
 -- isPrefixOf
 -- isPrefixOf :: Eq a => [a] -> [a] -> Bool
 myisPrefixOf [] _ = True
