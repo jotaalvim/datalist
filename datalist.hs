@@ -90,46 +90,46 @@ myreverse3 (h:t) = myreverse3 t ++ [h]
 -- intersperse 
 -- intersperse :: a -> [a] -> [a]
 -- puts an x inbetween all elements in a list 
-intersperse2 a []    = []
-intersperse2 a [x]   = [x]
-intersperse2 a (h:t) = h:a:intersperse2 a t
+myintersperse a []    = []
+myintersperse a [x]   = [x]
+myintersperse a (h:t) = h:a: myintersperse2 a t
 
-intersperse3 a l = tail $ concat [ a:[x] | x <- l ]
+myintersperse2 a l = tail $ concat [ a:[x] | x <- l ]
    
 -- intercalate 
 -- intercalate :: [a] -> [[a]] -> [a] 
 -- concats all elements in a list with another list in between them
-intercalate a []    = []
-intercalate a [l] = l 
-intercalate a (h:t) = h ++ a ++ intercalate a t
+myintercalate a []    = []
+myintercalate a [l] = l 
+myintercalate a (h:t) = h ++ a ++ myintercalate a t
 
-intercalate3 a (h:t) = concat $ h : [ a ++ x | x <- t ]
+myintercalate3 a (h:t) = concat $ h : [ a ++ x | x <- t ]
 
 -- traspose 
 -- transpose :: [[a]] -> [[a]] 
 -- transposed matrix
 --transpose l = [ map (!! k) l | k <- [0..(length $ head l) - 1] ]
-transpose l = [[ linha !! k | linha <- l, k < length linha ] | k <- [0.. t-1]]
+mytranspose l = [[ linha !! k | linha <- l, k < length linha ] | k <- [0.. t-1]]
     where t = maximum $ map length l
 
 -- subsequences
 -- subsequences :: [a] -> [[a]]
 -- subsequences of a list 
-subsequences [] = [[]]
-subsequences (h:t)  = [ h:x | x <- l ]  ++ l
-    where l = subsequences t
+mysubsequences [] = [[]]
+mysubsequences (h:t)  = [ h:x | x <- l ]  ++ l
+    where l = mysubsequences t
 
 -- permutations 
 -- permutations :: [a] -> [[a]]
 -- permutations of a list
-permutations [] = [[]]
-permutations l = [ (l!!k):x 
+mypermutations [] = [[]]
+mypermutations l = [ (l!!k):x 
                   | k <- [0..length l-1]
-                  , x <- (permutations $ delete2 k l) ]
+                  , x <- (mypermutations $ delete2 k l) ]
 
-permutations2 [] = [[]]
+mypermutations2 [] = [[]]
 ----permutations l = [ map  (: l!!k ) (permutations (delete (l!!k) l)) | k <- [0..length l -1] ]  
-permutations2 l = concat [ map ( (:) (l!!k) ) (permutations $ delete2 k l ) | k <- [0..length l-1] ]  
+mypermutations2 l = concat [ map ( (:) (l!!k) ) (mypermutations2 $ delete2 k l ) | k <- [0..length l-1] ]  
 
  -- * Reducing lists (folds)
 
@@ -259,6 +259,9 @@ myscanl f a [] = [a]
 myscanl f a (h:t) = a : myscanl f (f a h) t 
 
 -- scanl1
+-- scanl1 :: (a -> a -> a) -> [a] -> [a]
+myscanl1 f [] = []
+myscanl1 f (h:t) = myscanl f h t
 
 -- scanr
 -- scanr :: (a -> b -> b) -> b -> [a] -> [b]
@@ -267,18 +270,21 @@ myscanr f a (h:t) = f h h2 : (h2:t2)
     where (h2:t2) = myscanr f a t
 
 -- scanr1
-
--- FIXME
+-- scanr :: (a -> b -> b) -> [a] -> [b]
+myscanr1 f [] = []
+myscanr1 f (h:t) = myscanr f h t
 
 -- ** Accumulating maps
+
 -- mapAccumL
+-- mapAccumL :: Traversable t => (a -> b -> (a, c)) -> a -> t b -> (a, t c)
+
 -- mapAccumR
 
 -- ** Infinite lists
 
 -- iterate
 -- iterate :: (a -> a) -> a -> [a]  
--- faz uma lista aplicando uma funçao a um acc para smepre
 myiterate f a = a : myiterate f (f a)
 
 -- repeat
@@ -437,6 +443,7 @@ mylookup a ((c,b):cs)
 
 -- filter
 -- filter :: (a -> Bool) -> [a] -> [a]
+myfilter p l = [ x | x <- l, p x]
 
 -- partition
 -- partition :: (a -> Bool) -> [a] -> ([a], [a])
@@ -517,10 +524,20 @@ breakW  a []   = ["a"]
 breakW ' ' l   = "":l
 breakW c (a:b) = (c:a):b
 
-
 -- unlines
+-- unlines :: [String] -> String
+-- unlines . lines /= id
+
+myunlines = (++"\n") . myintercalate "\n"
+
+myunlines1 l = myintercalate "\n" l ++ "\n"
+
+myunlines2 [] = ""
+myunlines2 (a:as) = a++ "\n" ++ myunlines2 as
+
 -- unwords
---
+myunwords = myintersperse ' '
+
 --  ** \"Set\" operations
 
 -- nub
