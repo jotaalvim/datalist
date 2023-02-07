@@ -425,21 +425,30 @@ myelem x (h:t)
     | otherwise = myelem x t
 
 --myelem x l = foldl ( (== x) . (||) ) False l
---FIXME
 
 -- notElem
 -- notElem :: (Foldable t, Eq a) => a -> t a -> Bool
+mynotElem x = not . elem x
+mynotElem2 = (not .) . elem
 
 -- lookup
 -- lookup :: Eq a => a -> [(a, b)] -> Maybe b
-mylookup a [] = Nothing
+mylookup _ [] = Nothing
 mylookup a ((c,b):cs)
     | a == c = Just b
     | otherwise = mylookup a cs
 
 --  ** Searching with a predicate
+
 -- find
 -- find :: Foldable t => (a -> Bool) -> t a -> Maybe a
+myfind p = safeHead . filter p
+
+myfind2 _ [] = Nothing
+myfind2 p (h:t) 
+    | p h = Just h
+    | otherwise = myfind2 p t
+
 
 -- filter
 -- filter :: (a -> Bool) -> [a] -> [a]
@@ -477,30 +486,70 @@ myzip (h:t) (h2:t2) = (h,h2):myzip t t2
 myzip2 l1 l2 = [(x,y)  |  x <- l1, y <- l2 ]
 
 -- zip3
+-- zip3 :: [a] -> [b] -> [c] -> [(a, b, c)]
 myzip3 l1 l2 l3 = [(x,y,z)  |  x <- l1, y <- l2, z <- l3 ]
 
---zip 4
+-- zip 4
+-- zip4 :: [a] -> [b] -> [c] -> [d] -> [(a, b, c,d)]
 myzip4 l1 l2 l3 l4 = [(x,y,z,a)  |  x <- l1, y <- l2, z <- l3, a <- l4]
 
---zip 5
+-- zip5
+-- zip5 :: [a] -> [b] -> [c] -> [d] -> [e] -> [(a, b, c, d, e)]
 myzip5 l1 l2 l3 l4 l5 = [(x,y,z,a,b)  |  x <- l1, y <- l2, z <- l3, a <- l4, b <- l5]
 
---zip 6
+-- zip6
+-- zip6 :: [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [(a, b, c, d, e, f)]
 myzip6 l1 l2 l3 l4 l5 l6 = [(x,y,z,a,b,c)  |  x <- l1, y <- l2, z <- l3, a <- l4, b <- l5, c <- l6]
 
---zip 7
+-- zip7
+-- zip7 :: [a] -> [b] -> [c] -> [d] -> [e] -> [f] -> [g] -> [(a, b, c, d, e, f, g)]
 myzip7 l1 l2 l3 l4 l5 l6 l7 = [(x,y,z,a,b,c,d)  |  x <- l1, y <- l2, z <- l3, a <- l4, b <- l5, c <- l6, d <- l7]
 
 -- zipWith
 -- zipWith3
 -- zipWith4, zipWith5, zipWith6, zipWith7
---
+
 -- unzip
+-- unzip :: [(a, b)] -> ([a], [b])
+myunzip [] = ([],[])
+myunzip ((a,b):h) = (a:p, b:q)
+    where (p,q) = myunzip h
+
+myunzip12 l = (map fst l, map snd l)
+
 -- unzip3
--- unzip4, unzip5, unzip6, unzip7
---
+-- unzip3 :: [(a, b, c)] -> ([a], [b], [c])
+myunzip3 [] = ([],[],[])
+myunzip3 ((a,b,c):h) = (a:p, b:q,c:r)
+    where (p,q,r) = myunzip3 h
+
+myunzip32 l = ( [a|(a,b,c)<-l] , [b|(a,b,c)<-l] ,  [c|(a,b,c)<-l] )
+
+-- unzip4
+-- unzip4 :: [(a, b, c, d)] -> ([a], [b], [c], [d])
+myunzip4 [] = ([],[],[],[])
+myunzip4 ((a,b,c,d):h) = (a:p, b:q, c:r, d:s)
+    where (p,q,r,s) = myunzip4 h
+
+-- unzip5 
+-- unzip5 :: [(a, b, c, d,e)] -> ([a], [b], [c], [d], [e])
+myunzip5 [] = ([],[],[],[],[])
+myunzip5 ((a,b,c,d,r,e):h) = (a:p, b:q, c:r, d:s, e:t)
+    where (p,q,r,s,t) = myunzip5 h
+
+-- unzip6 
+-- unzip6 :: [(a, b, c, d, e, f)] -> ([a], [b], [c], [d], [e], [f])
+myunzip6 [] = ([],[],[],[],[],[])
+myunzip6 ((a,b,c,d,r,e,f):h) = (a:p, b:q, c:r, d:s, e:t, f:u)
+    where (p,q,r,s,t,u) = myunzip6 h
+-- unzip7
+-- unzip7 :: [(a, b, c, d, e, f, g)] -> ([a], [b], [c], [d], [e], [f], [g])
+myunzip7 [] = ([],[],[],[],[],[],[])
+myunzip7 ((a,b,c,d,r,e,f,g):h) = (a:p, b:q, c:r, d:s, e:t, f:u,v)
+    where (p,q,r,s,t,u,v) = myunzip7 h
+
 --  * Special lists
---
+
 --  ** Functions on strings
 
 -- lines
@@ -610,5 +659,6 @@ delete2 0 (h:t) = t
 delete2 n (h:t) = h: delete2 (n-1) t 
 -------------------
 
-
-
+safeHead :: [a] -> Maybe a
+safeHead [] = Nothing
+safeHead (a:as) = Just a
