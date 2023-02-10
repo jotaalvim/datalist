@@ -315,7 +315,19 @@ mycycle2 l = l ++ mycycle2 l
 
 -- ** Unfolding
 -- unfoldr
+-- unfoldr :: (b -> Maybe (a, b)) -> b -> [a]
 -- anamorfismo
+myunfoldr f b = case f b of
+    Nothing    -> []
+    Just (x,y) -> x: myunfoldr f y
+
+-- FIXME 
+myunfoldr2 f b = (\(x,y) -> x : myunfoldr f y) <$> f b
+
+--myunfoldr3 :: (b -> Maybe (a, b)) -> b -> [a]
+--myunfoldr3 f b =  (\(x,y) -> x : myunfoldr f y) =<< f b 
+
+
 
 --  * Sublists
 --  ** Extracting sublists
@@ -397,19 +409,27 @@ myinits2 l = l: (h2:t2)
 mytails [] = [[]]
 mytails l = l : mytails (tail l)
 
+mytails2 = (++[[]]) . myunfoldr out 
+    where out [] = Nothing
+          out  x = Just (x, tail x)
+
 --  ** Predicates
 -- isPrefixOf
 -- isPrefixOf :: Eq a => [a] -> [a] -> Bool
 myisPrefixOf [] _ = True
+myisPrefixOf _ [] = False
 myisPrefixOf (h:t) (h2:t2) = h == h2 && myisPrefixOf t t2
 
 -- isSuffixOf
 -- isSuffixOf :: Eq a => [a] -> [a] -> Bool
--- FIXME
---myisSuffixOf [] _ = True
---myisSuffixOf l l2 = f == f2 && myisSuffixOf FIXEM  
---    where f  = last l
---          f2 = last l2 
+myisSuffixOf [] _ = True
+myisSuffixOf _ [] = False
+myisSuffixOf l l2 = f == f2 && myisSuffixOf (init l) (init l2)
+    where f  = last l
+          f2 = last l2 
+
+myisSuffixOf2 a b = myisPrefixOf (reverse a) (reverse b)
+
 -- isInfixOf
 -- isSubsequenceOf
 
