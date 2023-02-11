@@ -620,31 +620,38 @@ mynub (h:t)
 -- delete
 -- delete :: Eq a => a -> [a] -> [a]
 -- delete apaga a primeira ocorrencia 
-delete x [] = []
-delete x (h:t)
+mydelete x [] = []
+mydelete x (h:t)
     | x == h = t
-    | otherwise = h: delete x t
+    | otherwise = h: mydelete x t
 
 -- (\\)
---
+-- (\\) :: Eq a => [a] -> [a] -> [a]
+-- called ss to the \\ function
+ss [] _ = []
+ss l [] = l
+ss l (h:t) = ss (mydelete h l) t
+
+ss2 = foldl $ flip mydelete
+
 -- union
 -- intersect
---
+
 --  ** Ordered lists
 -- sort
 -- sortOn
 -- insert
---
+
 --  * Generalized functions
---
+
 --  ** The \"@By@\" operations
 --  | By convention, overloaded functions have a non-overloaded
 --  counterpart whose name is suffixed with \`@By@\'.
--- 
+ 
 --  It is often convenient to use these functions together with
 --  'Data.Function.on', for instance @'sortBy' ('Prelude.compare'
 --  ``Data.Function.on`` 'Prelude.fst')@.
---
+
 --  *** User-supplied equality (replacing an @Eq@ context)
 --  | The predicate is assumed to define an equivalence.
 -- nubBy
@@ -653,23 +660,21 @@ delete x (h:t)
 -- unionBy
 -- intersectBy
 -- groupBy
---
+
 --  *** User-supplied comparison (replacing an @Ord@ context)
 --  | The function is assumed to define a total ordering.
 -- sortBy
 -- insertBy
 -- maximumBy
 -- minimumBy
---
---
+
+
 -- genericLength
 -- genericTake
 -- genericDrop
 -- genericSplitAt
 -- genericIndex
 -- genericReplicate
-
-
 
 ---------------------------------------------------------------------------
 -- apaga um indice
