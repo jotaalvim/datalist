@@ -321,13 +321,14 @@ myunfoldr f b = case f b of
     Nothing    -> []
     Just (x,y) -> x: myunfoldr f y
 
--- FIXME 
-myunfoldr2 f b = (\(x,y) -> x : myunfoldr f y) <$> f b
+myunfoldr2 f = inMaybe . (fmap (\(a,b) -> (a, myunfoldr2 f b) ) . f)
 
---myunfoldr3 :: (b -> Maybe (a, b)) -> b -> [a]
---myunfoldr3 f b =  (\(x,y) -> x : myunfoldr f y) =<< f b 
+inMaybe Nothing = []
+inMaybe (Just (a,x)) = a:x
 
-
+-- monadic version of unfoldr3
+myunfoldr3 f = inMaybe . (>>= return . mult ) . f where 
+    mult (a,b) = (a , myunfoldr3 f b)
 
 --  * Sublists
 --  ** Extracting sublists
