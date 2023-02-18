@@ -162,26 +162,32 @@ myfoldr1 f (h:t) = f h (myfoldr1 f t)
 -- concat 
 -- concat :: [[a]] -> [a]
 -- concatenate all ellements in a list
-myconcat = foldl1 (++)
+myconcat = (>>= id)
 
-myconcat2 l  = [ x | f <- l, x <- f ]
+myconcat2 = foldl1 (++)
+
+myconcat3 l  = [ x | f <- l, x <- f ]
 -- myconcat2 l = [ x | x <- f ,f <- l] dosen't work, order matters
 
-myconcat3 [] = [] 
-myconcat3 (h:t) = h ++ myconcat3 t
+myconcat4 [] = [] 
+myconcat4 (h:t) = h ++ myconcat3 t
 
-myconcat4 = foldr  ( foldr (:) ) [] 
-myconcat5 = foldl  ( foldr (:) ) []
+myconcat5 = foldr  ( foldr (:) ) [] 
+
 
 -- concatMap 
 -- concatMap :: (a -> [b]) -> [a] -> [b]
 -- concatenates and applies a function to all elements
 myconcatMap f = foldr ( (++) . f ) []
 
-myconcatMap3 f = foldr ( foldr (:) . f ) []
-
 myconcatMap2 f [] = []
 myconcatMap2 f (h:t) = f h ++ myconcatMap2 f t
+
+--FIXME 
+myconcatMap3 f = foldr ( foldr (:) . f ) []
+
+myconcatMap4 f l = (map f l) >>= id
+myconcatMap5 =  (.) (>>= id ) . map 
 
 -- and
 -- and :: Bool -> Bool -> Bool
