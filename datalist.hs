@@ -73,7 +73,12 @@ mymap2 f [] = []
 mymap2 f (h:t) = f h : mymap2 f t
 
 mymap3 f l = [ f x | x <- l ]
-   
+
+mymap4 f = (>>= (return . f ))
+mymap5 f = (>>= (singleton . f ))
+
+
+
 -- reverse 
 -- reverse :: [a] -> [a]
 myreverse = foldl ( flip (:) ) []
@@ -238,7 +243,6 @@ mymaximum = foldr1 max
 
 mymaximum2 (h:t) = foldr max h t
 
-mymaximum3 [] = error "empty list"
 mymaximum3 [x] = x
 mymaximum3 (h:t) = if (h > k) then h else k
     where k = mymaximum3 t
@@ -250,7 +254,6 @@ myminimum = foldr1 min
 
 myminimum2 (h:t) = foldr min h t
 
-myminimum3 [] = error "empty list"
 myminimum3 [x] = x
 myminimum3 (h:t) = if (h < k) then h else k
     where k = myminimum3 t
@@ -284,6 +287,7 @@ myscanr1 f (h:t) = myscanr f h t
 
 -- mapAccumL
 -- mapAccumL :: Traversable t => (a -> b -> (a, c)) -> a -> t b -> (a, t c)
+--mymapAcummL f a [] = a
 
 -- mapAccumR
 
@@ -477,9 +481,10 @@ myfind2 p (h:t)
     | otherwise = myfind2 p t
 
 
--- filter
 -- filter :: (a -> Bool) -> [a] -> [a]
 myfilter p l = [ x | x <- l, p x]
+
+myfilter2 p = (>>= (\x -> if p x then [x] else []))
 
 -- partition
 -- partition :: (a -> Bool) -> [a] -> ([a], [a])
