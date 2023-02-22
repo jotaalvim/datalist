@@ -475,10 +475,10 @@ mylookup a ((c,b):cs)
 -- find :: Foldable t => (a -> Bool) -> t a -> Maybe a
 myfind p = safeHead . filter p
 
-myfind2 _ [] = Nothing
-myfind2 p (h:t) 
+myfind3 _ [] = Nothing
+myfind3 p (h:t) 
     | p h = Just h
-    | otherwise = myfind2 p t
+    | otherwise = myfind3 p t
 
 
 -- filter :: (a -> Bool) -> [a] -> [a]
@@ -502,8 +502,15 @@ pp (h:t) x | x == 0 = h
            | otherwise = pp t (x-1) 
 
 -- elemIndex
+-- elemIndex :: Eq a => a -> [a] -> Maybe Int
+myelemIndex x = safeHead . myelemIndices x
+
 -- elemIndices
---
+myelemIndices :: Eq a => a -> [a] -> [Int]
+myelemIndices a b= undefined
+
+
+
 -- findIndex
 -- findIndices
 --
