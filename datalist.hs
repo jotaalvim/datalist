@@ -505,15 +505,21 @@ pp (h:t) x | x == 0 = h
 -- elemIndex :: Eq a => a -> [a] -> Maybe Int
 myelemIndex x = safeHead . myelemIndices x
 
+myelemIndex2 = (safeHead .) .  myelemIndices
+
 -- elemIndices
-myelemIndices :: Eq a => a -> [a] -> [Int]
-myelemIndices a b= undefined
-
-
+-- elemIndices :: Eq a => a -> [a] -> [Int]
+myelemIndices a = myfindIndices (==a)
 
 -- findIndex
+-- findIndex :: (a -> Bool) -> [a] -> Maybe Int
+myfindIndex f = safeHead . myfindIndices f 
+myfindIndex2  = (safeHead .) . myfindIndices
+
 -- findIndices
---
+-- findIndices :: (a -> Bool) -> [a] -> [Int] 
+myfindIndices p l = [x | (h,x) <- zip l [0..] , p h]
+
 --  * Zipping and unzipping lists
 
 -- zip
