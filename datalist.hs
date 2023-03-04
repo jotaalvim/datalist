@@ -474,6 +474,7 @@ mylookup a ((c,b):cs)
 -- find
 -- find :: Foldable t => (a -> Bool) -> t a -> Maybe a
 myfind p = safeHead . filter p
+myfind2  = (safeHead .) . filter
 
 myfind3 _ [] = Nothing
 myfind3 p (h:t) 
@@ -642,6 +643,8 @@ mynub (h:t)
     | elem h t = mynub t
     | otherwise = h:mynub t
 
+-- mynub2 = foldr 
+
 -- delete
 -- delete :: Eq a => a -> [a] -> [a]
 -- delete apaga a primeira ocorrencia 
@@ -660,6 +663,10 @@ ss l (h:t) = ss (mydelete h l) t
 ss2 = foldl $ flip mydelete
 
 -- union
+-- union :: Eq a => [a] -> [a] -> [a]
+myunion l l2 = l ++ (ss l2 l)
+--myunion l l2 = l ++ (\\ l2 l)
+
 -- intersect
 
 --  ** Ordered lists
