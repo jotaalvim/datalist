@@ -668,25 +668,45 @@ myunion l l2 = l ++ (ss l2 l)
 --myunion l l2 = l ++ (\\ l2 l)
 
 -- intersect
+-- intersect :: Eq A => [a] -> [a] -> [a]
+myintersect l l2 = foldr (\a b -> if elem a b then b else mydelete a b) l2  l
 
 --  ** Ordered lists
 -- sort
+-- sort :: Ord a => [a] -> [a]
+mysort []    = []
+mysort [a]   = [a] 
+mysort l = merge (mysort n) (mysort m)
+    where 
+        (n,m) =  split2 l
+        split2 :: [a] -> ([a],[a])
+        split2 [] = ([],[]) 
+        split2 [a] = ([a],[]) 
+        split2 (z:x:c) = (z:p,x:q)
+            where (p,q) = split2 c
+
+        merge a [] = a
+        merge [] b = b
+        merge (a:b) (c:d) 
+            | a > c     = c:a: merge b d
+            | otherwise = a:c: merge b d
+        
 -- sortOn
 -- insert
 
 --  * Generalized functions
 
---  ** The \"@By@\" operations
---  | By convention, overloaded functions have a non-overloaded
---  counterpart whose name is suffixed with \`@By@\'.
- 
---  It is often convenient to use these functions together with
---  'Data.Function.on', for instance @'sortBy' ('Prelude.compare'
---  ``Data.Function.on`` 'Prelude.fst')@.
-
---  *** User-supplied equality (replacing an @Eq@ context)
---  | The predicate is assumed to define an equivalence.
 -- nubBy
+-- nubBy :: (a -> a -> Bool) -> [a] -> [a]
+mynubBy f [] = []
+mynubBy f [a] = [a]
+mynubBy f (a:b)
+    | elem (f a) (map f b) = a : mynubBy f b
+    | otherwise            = mynubBy f b
+
+
+
+
 -- deleteBy
 -- deleteFirstsBy
 -- unionBy
@@ -695,8 +715,13 @@ myunion l l2 = l ++ (ss l2 l)
 
 --  *** User-supplied comparison (replacing an @Ord@ context)
 --  | The function is assumed to define a total ordering.
+
 -- sortBy
+
 -- insertBy
+-- insertBy :: (a -> a -> Ordering) -> a -> [a] -> [a]
+-- weird type to do later
+
 -- maximumBy
 -- minimumBy
 
