@@ -1,6 +1,6 @@
 # Data.List
 
--XNPlusKPatterns -XMultiParamTypeClasses -XFlexibleInstances -XFlexibleContexts -XNoMonomorphismRestriction
+ghci -XNPlusKPatterns -XMultiParamTypeClasses -XFlexibleInstances -XFlexibleContexts -XNoMonomorphismRestriction datalist.hs
 
 In here you'll find a homemade implmementation of all Data.List functions, most of them are defined in 2 or 3 different ways 
 
